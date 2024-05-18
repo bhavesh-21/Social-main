@@ -5,7 +5,7 @@ export default {
               <a  id="divfix" type="button" data-mdb-ripple-color="info" class="btn btn-outline-light rounded-circle p-0  btn-lg border-0" v-on:click="goto('/add_post')">
               <img src="/static/images/plus.svg" width="80">
               </a>
-              
+     
 
   <div v-if="posts.length==0 && q.length==0" class="container-fluid" style="text-align: center; margin-top: 180px;">
   <h2>There aren't any post to see</h2>
@@ -42,7 +42,7 @@ export default {
         <div class="card h-100">
 
             <a @click="goto('/post/'+post.id)">
-                <img :src="post.thumbnail" class="card-img-top" alt="Skyscrapers" height="300px"
+                <img :src="'/static/images/post_pic/'+post.thumbnail" class="card-img-top" alt="Skyscrapers" height="300px"
                     style="object-fit: cover; object-position: center top" />
             </a>
             <div class="card-body">
@@ -60,7 +60,7 @@ export default {
             <div class="card-footer border-0">
                 <a @click="goto('/profile/'+post.poster.username)" class="d-flex align-items-center">
                     <div class="mr-2">
-                        <img class="profile-pic" :src="post.poster.profile_pic" width="40px" height="40px"
+                        <img class="profile-pic" :src="'/static/images/user_pic/'+post.poster.profile_pic" width="40px" height="40px"
                             style="object-fit: cover; object-position: center top">
                     </div>
                     <div style="margin:0px 15px 0px 15px">
@@ -112,7 +112,7 @@ export default {
                             Post
                         </a>
                     </div>
-
+      
                     <div v-else>
                         <a style="padding-left: 3px; margin-right: 5px;" @click="goto('/edit_post/'+post.id)"
                             class="btn btn-outline-secondary btn-sm">
@@ -302,7 +302,8 @@ export default {
             this.saved = true
           }
           this.posts = jsonData;
-          console.log(this.posts)
+
+          console.log("posts are : ",this.posts)
         })
       } else {
         this.posts = this.p;

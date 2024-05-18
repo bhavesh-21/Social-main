@@ -19,37 +19,21 @@ export default {
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent" style="
     
-    height: 45px;
     ">
-    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <ul class="navbar-nav mr-auto mb-2 mb-lg-0" style="margin-left: auto;">
     
-    </ul>
-
-
-    
-      
-        <form v-if="this.$store.state.login && route==='Search User'" @click.prevent="sear()"
-
-        
-
-
-          class="d-flex mb-2 mt-2 px-2">
+        <form v-if="this.$store.state.login && route==='Search User'"  class="d-flex mb-2 mt-2 px-2">
           <div class="input-group">
-          <input type="text" onsearch="rr()" placeholder="Search User" ria-label="Search" name="search" class="form-control" style="border-top-right-radius: 0 !important;border-bottom-right-radius: 0 !important;border-radius: 3px;border-right: none;"> 
-          <div style="
-    background-color: white;
-    height: 2.7rem;
-"><button type="button" aria-label="Close" class="btn-close" style="
-    background-color: white;
-    margin: 40% 0;
-"></button></div> <button type="submit" class="btn btn-secondary" style="background-color: transparent;"><img src="/static/images/search.svg" height="30" alt="S" loading="lazy" class="rounded-circle"></button></div>
-
+          <input type="search" v-model="query" id="query" placeholder="Search User" ria-label="Search" name="search" class="form-control" style="border-top-right-radius: 0 !important;border-bottom-right-radius: 0 !important;border-radius: 3px;border-right: none;"> 
+          <div class="btn btn-secondary" style="background-color: transparent;"><img src="/static/images/search.svg" height="30" alt="S" loading="lazy" class="rounded-circle"></div>
+          </div>
         </form>
+
         <div v-else>
-        <a  id="users" class="nav-link mr-3 " @click="goto('/users')" v-if="this.$store.state.login">
+        <a  id="" class="nav-link px-1" @click="goto('/users')" v-if="this.$store.state.login">
           <img class="ml-2 mb-0 " src="/static/images/group.svg" height="35" alt="Community"
             loading="lazy" />
-          <span id="" class="text-white">Connect With Others</span>
+          <span id="" class="text-white">Connect With Users</span>
         </a>
 </div>
         <div class="d-flex align-items-center px-1 mt-0 mb-0" v-if="this.$store.state.login">
@@ -58,16 +42,16 @@ export default {
               <div class="dropdown">
                 <button class="btn dropdown-toggle" type="button" id="drop1" data-bs-toggle="dropdown"
                   aria-expanded="false" style="
-        padding-top: 1px;
-        padding-bottom: 1px;
-        padding-left: 3px;
-        padding-right: 3px;
-        color: #fff;
-        display: flex;
-        flex-direction: row;
-        ">
+                  padding-top: 1px;
+                  padding-bottom: 1px;
+                  padding-left: 3px;
+                  padding-right: 3px;
+                  color: #fff;
+                  display: flex;
+                  flex-direction: row;
+                  ">
                   <img class="profile-pic" :src="getImgUrl()" width="32" height="32" style="object-fit: cover; object-position: center top" loading="lazy">
-                     {{ this.$store.state.user.username }}
+                  {{ this.$store.state.user.username }}
                 </button>
                 <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="drop1">
                   <li><a class="dropdown-item hand" @click="goto('/profile/'+username)">My
@@ -96,6 +80,7 @@ export default {
 
     </div>
   </div>
+  </ul>
 </nav >
 </div>
   
@@ -107,36 +92,36 @@ export default {
       query: "",
       x: 0,
       username: null,
-      img: null
-    }
+      img: null,
+    };
   },
   computed: {
     route() {
       this.x;
       if (this.$router.history.current.path === "/users") {
-        return "Search User"
+        return "Search User";
       } else if (this.$router.history.current.path === "/profile") {
-        return "Search My Posts"
+        return "Search My Posts";
       } else {
-        return "Search Feed"
+        return "Search Feed";
       }
-    }
-
+    },
   },
   methods: {
     r() {
-      console.log("ggg")
-      this.query = null
-      this.$store.state.query = null
-      this.$store.searchtype = null
+      console.log("ggg");
+      this.query = null;
+      this.$store.state.query = null;
+      this.$store.searchtype = null;
       // this.$store.commit("reset_search")
     },
     getImgUrl() {
-        var x = this.$store.state.user.profile_pic
-        return x
+      var x = this.$store.state.user.profile_pic;
+
+      return "/static/images/user_pic/" + x;
     },
     goto(url) {
-      this.$router.push(url).catch(() => { })
+      this.$router.push(url).catch(() => {});
     },
     sear() {
       if (this.query.length == 0) {
@@ -144,68 +129,85 @@ export default {
         this.$store.state.query = null;
       }
       if (this.query.length >= 0) {
-        this.$store.commit("search", this.query)
+        this.$store.commit("search", this.query);
       }
     },
     logout() {
-      this.$store.commit("set_login_details", false)
-      fetch(`/logou`,{
-        headers: { Authorization: `Bearer ${sessionStorage.getItem("access_token") ? sessionStorage.getItem("access_token") : localStorage.getItem("access_token")}` }
+      this.$store.commit("set_login_details", false);
+      fetch(`/logou`, {
+        headers: {
+          Authorization: `Bearer ${
+            sessionStorage.getItem("access_token")
+              ? sessionStorage.getItem("access_token")
+              : localStorage.getItem("access_token")
+          }`,
+        },
       })
         .then((r) => r.json())
         .then((d) => {
-            console.log(d.msg)
+          console.log(d.msg);
         });
-      this.$store.state.user = {}
-      this.$router.push('/')
-      localStorage.removeItem('access_token')
-      sessionStorage.removeItem('access_token')
+      this.$store.state.user = {};
+      this.$router.push("/");
+      localStorage.removeItem("access_token");
+      sessionStorage.removeItem("access_token");
     },
     login() {
-      fetch('/log', {
-        method: 'POST',
-        body: JSON.stringify({ username: this.username, password: this.password }),
+      fetch("/log", {
+        method: "POST",
+        body: JSON.stringify({
+          username: this.username,
+          password: this.password,
+        }),
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       })
         .then((res) => {
           if (res.ok) {
-            return res.json()
+            return res.json();
           }
         })
         .then((data) => {
-          localStorage.setItem(
-            'auth-token',
-            data.auth
-          )
-          this.$router.push('/')
-        })
+          localStorage.setItem("auth-token", data.auth);
+          this.$router.push("/");
+        });
     },
   },
   watch: {
     $route(to, from) {
-      this.x++
-    }
+      this.x++;
+    },
+    query(n, o) {
+      if (n >= 0) {
+        this.$store.commit("search", n);
+      }
+      console.log("Navbar: ", n);
+      this.$store.state.query = n;
+      console.log("store: ", this.$store.state.query);
+    },
   },
   async mounted() {
-    if(this.$store.state.login){
-      console.log("fetch user")
-    // context.commit("set_user_details", {})
-    try {
-      const response = await fetch("/current-user", {
-        headers: { Authorization: `Bearer ${sessionStorage.getItem("access_token")?sessionStorage.getItem("access_token"):localStorage.getItem("access_token")}` }
-      });
-      const jsonData = await response.json();
-      this.username=jsonData.username
-      this.$store.state.user=jsonData
-      console.log(jsonData.username)
-    } catch (error) {
-      console.error(error);
+    if (this.$store.state.login) {
+      console.log("fetch user");
+      // context.commit("set_user_details", {})
+      try {
+        const response = await fetch("/current-user", {
+          headers: {
+            Authorization: `Bearer ${
+              sessionStorage.getItem("access_token")
+                ? sessionStorage.getItem("access_token")
+                : localStorage.getItem("access_token")
+            }`,
+          },
+        });
+        const jsonData = await response.json();
+        this.username = jsonData.username;
+        this.$store.state.user = jsonData;
+        console.log(jsonData.username);
+      } catch (error) {
+        console.error(error);
+      }
     }
-  }
-    }
-    
-}
-
-
+  },
+};

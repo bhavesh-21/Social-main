@@ -6,7 +6,7 @@ export default {
       <div class="row g-0 ">
 
           <div class="col-sm-12 col-lg-3 d-flex justify-content-center align-items-center">
-              <img class="profile-pic" :src="user.profile_pic" height="250px" width="250px"
+              <img class="profile-pic" :src="'/static/images/user_pic/'+user.profile_pic" height="250px" width="250px"
                   style="object-fit: cover; object-position: center top">
 
           </div>

@@ -1,3 +1,4 @@
+from urllib.parse import urljoin
 from flask_restful import Resource, Api
 from flask_restful import fields, marshal_with
 from flask_restful import reqparse
@@ -21,38 +22,13 @@ from flask_jwt_extended import JWTManager
 import base64
 from application.data.data_access import *
 from application.controller.controllers import current_user
-def base(picc,ifpic=False):
+def url(picc,ifpic=False):
     if ifpic==False:
-        x=app.config['POST_FOLDER']
-        if picc.startswith("data:image/"):
-            print("<<<post||||"+picc[:20]+"||||>>>>>")
-            return picc
-        else:
-            pic=os.path.join(x,picc)
-            
-            print("<<<<<<********",pic,"********>>>>>>")
-            with open(pic, "rb") as f:
-                rr= base64.b64encode(f.read()).decode("UTF-8")
-                print("<<<post||||"+rr[:20]+"||||>>>>>")
-                if not rr.startswith("data:image/"):
-                    return "data:image/png;base64,"+rr
-                else:
-                    return rr
+        return os.path.join(app.config['POST_FOLDER'],picc)
     else:
-        x=app.config['PIC_FOLDER']
-        if picc.startswith("data:image/"):
-            print("<<<pic||||"+picc[:20]+"||||>>>>>")
-            return picc
-        else:
-            pic=os.path.join(x,picc)
-            print("<<<<<<********",pic,"********>>>>>>")
-            with open(pic, "rb") as f:
-                rr= base64.b64encode(f.read()).decode("UTF-8")
-                print("<<<pic||||"+rr[:20]+"||||>>>>>")
-                if not rr.startswith("data:image/"):
-                    return "data:image/png;base64,"+rr
-                else:
-                    return rr
+        return os.path.join(app.config['POST_FOLDER'],picc)
+        
+
 
 create_user_parser = reqparse.RequestParser()
 create_user_parser.add_argument('name', type=str, help="name Required",required=True)
@@ -88,11 +64,10 @@ class Search_User(Resource):
     def get(self):
         current_user=m()
         query=request.args.get('query')
-        users = Users.query.filter(and_(Users.email != current_user.email, Users.name.like('%' + query + '%')))
+        users = Users.query.filter(Users.name.like('%' + query + '%'))
         user = users.order_by(Users.name).all()
         for u in user:
-            
-            u.profile_pic=base(u.profile_pic,True)
+            u.profile_pic=u.profile_pic
             u.f1 = u.followers.count()
             u.f2 = u.followed.count()
             if (current_user.is_following(u)):
@@ -103,8 +78,6 @@ class Search_User(Resource):
             raise NotFoundError(status_code=404)
         return user
 
-
-
 class User_all(Resource):
     @marshal_with(resource_fields)
     @jwt_required()
@@ -112,7 +85,7 @@ class User_all(Resource):
         user = Users.query.all()
         current_user=m()
         for u in user:
-            u.profile_pic=base(u.profile_pic,True)
+            u.profile_pic=u.profile_pic
             u.f1 = u.followers.count()
             u.f2 = u.followed.count()
             if (current_user.is_following(u)):
@@ -168,7 +141,7 @@ class User(Resource):
     def get(self, username):
         current_user=m()
         u = us(username)
-        xx=base(u.profile_pic,True)
+        xx=u.profile_pic
         u.profile_pic=xx
         u.f1 = u.followers.count()
         u.f2 = u.followed.count()
@@ -228,7 +201,7 @@ class Myfollowers(Resource):
         if current_user.username == username:
             user=current_user.followers.all()
             for u in user:
-                u.profile_pic=base(u.profile_pic,True)
+                u.profile_pic=u.profile_pic
                 u.f1 = u.followers.count()
                 u.f2 = u.followed.count()
                 if (current_user.is_following(u)):
@@ -250,7 +223,7 @@ class Myfollowing(Resource):
         if current_user.username == username:
             user=current_user.followed.all()
             for u in user:
-                u.profile_pic=base(u.profile_pic,True)
+                u.profile_pic=u.profile_pic
                 u.f1 = u.followers.count()
                 u.f2 = u.followed.count()
                 if (current_user.is_following(u)):
@@ -263,12 +236,6 @@ class Myfollowing(Resource):
         else:
             return {"error":"cannot view others following"}
 
-
-    
-    
-   
-    
-
 create_post_parser = reqparse.RequestParser()
 create_post_parser.add_argument('title', type=str, help="title Required",required=True)
 create_post_parser.add_argument('content', type=str, help="content Required",required=True)
@@ -278,8 +245,6 @@ update_post_parser = reqparse.RequestParser()
 update_post_parser.add_argument('title', type=str, help="title of post")
 update_post_parser.add_argument('content', type=str, help="content of post")
 update_post_parser.add_argument('slug', type=str, help="slug of post")
-
-
 
 post_fields = {
     'id' :  fields.Integer,
@@ -303,12 +268,12 @@ class Feed(Resource):
         posts = current_user.followed_posts().all()
         # posts = Posts.query.filter_by(poster_id=current_user.id).all()
         for p in posts:
-            p.thumbnail=base(p.thumbnail)
+            p.thumbnail=p.thumbnail
             p.lik=len(p.likes)
             p.commen=len(p.comments)
             # u=p.poster.username
             p.liked=bool(Like.query.filter(and_(Like.author==current_user.id,Like.post_id==p.id)).first())
-            p.poster.profile_pic=base(p.poster.profile_pic,True)
+            p.poster.profile_pic=p.poster.profile_pic
         return posts
 
         
@@ -322,12 +287,12 @@ class SearchFeed(Resource):
         # posts = posts.filter_by(posts.title.like('%' + query + '%'))
         # posts = Posts.query.filter_by(poster_id=current_user.id).all()
         for p in posts:
-            p.thumbnail=base(p.thumbnail)
+            p.thumbnail=p.thumbnail
             p.lik=len(p.likes)
             p.commen=len(p.comments)
             # u=p.poster.username
             p.liked=bool(Like.query.filter(and_(Like.author==current_user.id,Like.post_id==p.id)).first())
-            p.poster.profile_pic=base(p.poster.profile_pic,True)
+            p.poster.profile_pic=p.poster.profile_pic
         return posts
 
 class Myposts(Resource):
@@ -340,12 +305,12 @@ class Myposts(Resource):
         # posts = current_user.followed_posts().all()
         # posts = Posts.query.filter_by(poster_id=current_user.id).all()
         for p in posts:
-            p.thumbnail=base(p.thumbnail)
+            p.thumbnail=p.thumbnail
             p.lik=len(p.likes)
             p.commen=len(p.comments)
             # u=p.poster.username
             p.liked=bool(Like.query.filter(and_(Like.author==current_user.id,Like.post_id==p.id)).first())
-            p.poster.profile_pic=base(p.poster.profile_pic,True)
+            p.poster.profile_pic=p.poster.profile_pic
         return posts
 
         
@@ -360,12 +325,12 @@ class SearchMyposts(Resource):
         # posts = posts.filter_by(posts.title.like('%' + query + '%'))
         # posts = Posts.query.filter_by(poster_id=current_user.id).all()
         for p in posts:
-            p.thumbnail=base(p.thumbnail)
+            p.thumbnail=p.thumbnail
             p.lik=len(p.likes)
             p.commen=len(p.comments)
             # u=p.poster.username
             p.liked=bool(Like.query.filter(and_(Like.author==current_user.id,Like.post_id==p.id)).first())
-            p.poster.profile_pic=base(p.poster.profile_pic,True)
+            p.poster.profile_pic=p.poster.profile_pic
         return posts
 
 commenter_fields = {
@@ -404,12 +369,12 @@ class Post(Resource):
         if p is None:
             raise NotFoundError(status_code=404)
         current_user=m()  
-        p.thumbnail=base(p.thumbnail)
+        p.thumbnail=p.thumbnail
         p.lik=len(p.likes)
         p.commen=len(p.comments)
         p.commen=len(p.comments)
         p.liked=bool(Like.query.filter(and_(Like.author==current_user.id,Like.post_id==p.id)).first())
-        p.poster.profile_pic=base(p.poster.profile_pic,True)
+        p.poster.profile_pic=p.poster.profile_pic
         
         return p
     @jwt_required()
@@ -484,7 +449,7 @@ class commentofpost(Resource):
         for c in post:
             commenter=Users.query.filter_by(id=c.author).first()
             c.user_name=commenter.name
-            c.user_profile_pic=base(commenter.profile_pic,True)
+            c.user_profile_pic=commenter.profile_pic
         return post
 
 class likepost(Resource):

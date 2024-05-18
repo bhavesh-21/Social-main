@@ -5,7 +5,7 @@ from flask_jwt_extended import jwt_required
 from flask_jwt_extended import  verify_jwt_in_request
 
 
-@cache.cached(timeout=50, key_prefix='m')
+# @cache.cached(timeout=50, key_prefix='m')
 def m():
     verify_jwt_in_request()
     current_user=Users.query.filter_by(email=get_jwt_identity()).first()

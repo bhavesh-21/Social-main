@@ -8,7 +8,7 @@ export default {
 
     <div class="shadow p-3 mb-5 mt-4 bg-body rounded container" style="box-sizing: border-box;">
 
-        <img :src="post.thumbnail" alt="" class="img-fluid" style="border-radius: 0.8%;">
+        <img :src="'/static/images/post_pic/'+post.thumbnail" alt="" class="img-fluid" style="border-radius: 0.8%;">
         <div class="post-content pt-4">
             <h2 class="as">{{ post.title }}</h2>
             <div class="mb-3">
@@ -90,7 +90,7 @@ export default {
             <h4>About Author</h4>
             <a @click="goto('/profile/'+post.poster.username)"  class="about-author d-flex align-items-center">
                 <img class="profile-pic"
-                    :src="post.poster.profile_pic" width="160"
+                    :src="'/static/images/user_pic/'+post.poster.profile_pic" width="160"
                     height="160" style="object-fit: cover; object-position: center top">
 
                 <div style="margin-left: 20px;" class="com">
@@ -120,7 +120,7 @@ export default {
             <div v-for="comment in post.comments" class="about-author mb-4">
             
                 <img class="profile-pic"
-                    :src="comment.user_profile_pic" width="80"
+                    :src="'/static/images/user_pic/'+comment.user_profile_pic" width="80"
                     height="80" style="object-fit: cover; object-position: center top">
                 <div class="reply-body container">
                     <h5>

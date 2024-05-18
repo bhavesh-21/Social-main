@@ -15,7 +15,7 @@ export default {
                 <a @click="goto('/profile/'+user.username)" class="about-author d-flex align-items-center m-0 p-1">
                     <div class="col-md-4 p-1">
                         <img class="profile-pic"
-                        :src="user.profile_pic" width="195px"
+                        :src="'/static/images/user_pic/'+user.profile_pic" width="195px"
                             height="195px" style="object-fit: cover; object-position: center top">
                     </div>
                     <div class="col-md-8 " style="margin-left: 15px;">
@@ -61,7 +61,7 @@ export default {
 
   methods: {
     getImgUrl(u){
-      return " data:image/png;base64, "+u;
+      return u;
     },
     goto(url) {
       this.$router.push(url).catch(()=>{});
@@ -212,8 +212,9 @@ export default {
     },
     watch:{
       $store (newd,old) {
-        if ($store.state.query){
-          this.query=null
+        if (newd.state.query) {
+          console.log("Navbar query : ",$store.state.query)
+          search();
         }
       }
     }
