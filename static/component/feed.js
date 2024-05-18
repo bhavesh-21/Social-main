@@ -14,7 +14,7 @@ export default {
   </div>
 
   <div v-else class="container-fluid">
-    <nav aria-label="Page navigation example mb-0">
+    
       <div class="float-left text-black mt-2 my-4" >
 
         
@@ -31,7 +31,7 @@ export default {
 
 
       </div>
-    </nav>
+   
   
     
     <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3 row-cols-sm-1 row-cols-md-2 g-4 mb-4 mt-0">

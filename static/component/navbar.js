@@ -46,10 +46,10 @@ export default {
 
         </form>
         <div v-else>
-        <a  id="users" class="nav-link mx-3 hand" @click="goto('/users')" v-if="this.$store.state.login">
+        <a  id="users" class="nav-link mr-3 " @click="goto('/users')" v-if="this.$store.state.login">
           <img class="ml-2 mb-0 " src="/static/images/group.svg" height="35" alt="Community"
             loading="lazy" />
-          <span id="connect" class="text-white"></span>
+          <span id="" class="text-white">Connect With Others</span>
         </a>
 </div>
         <div class="d-flex align-items-center px-1 mt-0 mb-0" v-if="this.$store.state.login">
@@ -132,12 +132,8 @@ export default {
       // this.$store.commit("reset_search")
     },
     getImgUrl() {
-      var x = this.$store.state.user.profile_pic
-      if(x.startsWith("data:image/png;base64,")){
+        var x = this.$store.state.user.profile_pic
         return x
-      } else {
-        return "data:image/png;base64,"+ x
-      }
     },
     goto(url) {
       this.$router.push(url).catch(() => { })
