@@ -73,6 +73,7 @@ def search_user():
     if(request.method == "GET"):
         query = request.json.get("search", None)
         if  query != '':
+            current_user=m()
             users = Users.query.filter(and_(Users.email != current_user.email, Users.name.like('%' + query + '%')))
             users = users.order_by(Users.name).all()
             return jsonify(users=users)
@@ -125,18 +126,15 @@ def delete_post(id):
         return {"msg":"You Aren't Authorized To Delete That Post!"}
 
 
-
-
 @app.route('/comment/<int:id>', methods=['POST'])
 @jwt_required()
 def post(id):
+    current_user=m()
     poster = current_user.id
     comment = Comment(text=request.json.get("comment", None), post_id=id, author=poster)
     db.session.add(comment)
     db.session.commit()
     return {"msg":"Commented Successfully!"}
-
-
 
 @app.route('/remove-comment/<int:id>')
 @jwt_required()
@@ -149,7 +147,6 @@ def remove_comment(id):
         return {"msg":"Comment Deleted Successfully!!"}
     else:
         return {"msg":"Can't Delete Someone else comment or Comment on someone else post!"}
-  
 
 @app.route('/follow/<username>', methods=['GET'])
 @jwt_required()
@@ -196,8 +193,6 @@ def block(username):
     db.session.commit()
     return {'msg':'ok'}
 
-
-
 @app.route('/like-post/<int:id>')
 @jwt_required()
 def like(id):
@@ -217,7 +212,6 @@ def like(id):
         db.session.commit()
 
     return {"msg":"ok"},201
-
 
 @app.route('/edit-post/<int:id>', methods=['POST'])
 @jwt_required()
@@ -245,9 +239,6 @@ def edit_post(id):
         except:
             db.session.commit()
             return {"msg":"Blog Post edited Successfully without Image Upload!"}
-
-
-
 
 @app.route('/add-post', methods=['POST'])
 @jwt_required()
