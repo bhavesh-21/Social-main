@@ -7,10 +7,23 @@ export default {
               </a>
      
 
-  <div v-if="posts.length==0 && q.length==0" class="container-fluid" style="text-align: center; margin-top: 180px;">
-  <h2>There aren't any post to see</h2>
-  <p>There are no posts in your feed. <br> Connect with other users to see what they are posting.</p>
-  <a class="btn btn-dark" @click="goto('users')">Connect</a>
+  <div v-if="posts.length==0 && q.length==0" class="container-fluid" style="text-align: center;">
+    <div v-if="this.$router.history.current.path==='/feed'" style="margin-top: 180px;">
+      <h2>There aren't any post to see</h2>
+      <p>There are no Articles in your feed. <br> Connect with other users to see what they are posting.</p>
+      <a class="btn btn-dark" @click="goto('users')">Connect</a>
+    </div>
+
+    <div v-else>
+      <div  v-if="this.$router.history.current.path.split('/')[2]===this.$store.state.user.username" class="my-5">
+        <h2>There are no Articles of your.</h2> <br><p> Create a New Article Now.</p>
+        <a class="btn btn-success" @click="url_l">Create</a>
+      </div>
+      <div v-else class="my-5">
+        <h2>The user has not written any Articles.</h2>
+      </div>
+    </div>
+
   </div>
 
   <div v-else class="container-fluid">
@@ -51,7 +64,7 @@ export default {
               color: rgb(56, 55, 55);
               font-size: 25px; font-weight: 650; padding-top: 10px;" @click="goto('/post/'+post.id)">
                         {{post.title.substring(0, 88)}}</a>
-                    <p class="mb-0 mt-2 as">{{ post.slug.substring(1, 144) }}</p>
+                    <p class="mb-0 mt-2 as">{{ post.slug.substring(0, 144) }}</p>
 
                 </div>
 
@@ -202,6 +215,9 @@ export default {
     goto(url) {
       this.$router.push(url).catch(() => { });
     },
+    url_l(url) {
+      this.$router.push({ path: '/add_post' })
+    },
     time(t) {
       return moment.utc(t).fromNow();
     },
@@ -262,15 +278,6 @@ export default {
       let errorResponse = await res.json();
       console.error(errorResponse.error);
     }
-
-
-    // try {
-    //   const response = await fetch('/api/posts',{headers: { Authorization: `Bearer ${this.$store.getters.token}`, 'Content-Type': 'application/json' }})
-    //   const jsonData = await response.json();
-    //   this.users=jsonData
-    // } catch (error) {
-    //   console.error(error);
-    // }
 
   },
   watch: {

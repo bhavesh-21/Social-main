@@ -84,6 +84,7 @@ class User_all(Resource):
     def get(self):
         user = Users.query.all()
         current_user=m()
+        current_user=Users.query.filter_by(email=get_jwt_identity()).first()
         for u in user:
             u.profile_pic=u.profile_pic
             u.f1 = u.followers.count()

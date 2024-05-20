@@ -1,6 +1,4 @@
-export default {
-  template: `
-  <div>
+<div>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
 
@@ -72,142 +70,18 @@ export default {
 
 
                     <div class="d-flex align-items-center" v-else>
-                        <a style="text-decoration: none" class=" btn btn-dark px-3 me-2" @click="goto('/login')"">Login</a>
-                        <a class=" btn btn-outline-light me-3" @click="goto('/register')">Sign up</a>
+                        <a style="text-decoration: none" class=" btn btn-dark px-3 me-2" @click="goto('/login')"">
+            Login
+          </a>
+          <a class=" btn btn-outline-light me-3" @click="goto('/register')">
+                            Sign up
+                        </a>
                     </div>
 
 
 
-                    </ul>
+                </ul>
             </div>
         </div>
     </nav>
 </div>
-  
-  `,
-
-  data() {
-    return {
-      search: "Search",
-      query: "",
-      x: 0,
-      username: null,
-      img: null,
-    };
-  },
-  computed: {
-    route() {
-      this.x;
-      if (this.$router.history.current.path === "/users") {
-        return "Search User";
-      } else if (this.$router.history.current.path === "/profile") {
-        return "Search My Posts";
-      } else {
-        return "Search Feed";
-      }
-    },
-  },
-  methods: {
-    r() {
-      console.log("ggg");
-      this.query = null;
-      this.$store.state.query = null;
-      this.$store.searchtype = null;
-      // this.$store.commit("reset_search")
-    },
-    getImgUrl() {
-      var x = this.$store.state.user.profile_pic;
-
-      return "/static/images/user_pic/" + x;
-    },
-    goto(url) {
-      this.$router.push(url).catch(() => {});
-    },
-    sear() {
-      if (this.query.length == 0) {
-        this.$store.state.searchtype = null;
-        this.$store.state.query = null;
-      }
-      if (this.query.length >= 0) {
-        this.$store.commit("search", this.query);
-      }
-    },
-    logout() {
-      this.$store.commit("set_login_details", false);
-      fetch(`/logou`, {
-        headers: {
-          Authorization: `Bearer ${
-            sessionStorage.getItem("access_token")
-              ? sessionStorage.getItem("access_token")
-              : localStorage.getItem("access_token")
-          }`,
-        },
-      })
-        .then((r) => r.json())
-        .then((d) => {
-          console.log(d.msg);
-        });
-      this.$store.state.user = {};
-      this.$router.push("/");
-      localStorage.removeItem("access_token");
-      sessionStorage.removeItem("access_token");
-    },
-    login() {
-      fetch("/log", {
-        method: "POST",
-        body: JSON.stringify({
-          username: this.username,
-          password: this.password,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          }
-        })
-        .then((data) => {
-          localStorage.setItem("auth-token", data.auth);
-          this.$router.push("/");
-        });
-    },
-  },
-  watch: {
-    $route(to, from) {
-      this.x++;
-    },
-    query(n, o) {
-      if (n >= 0) {
-        this.$store.commit("search", n);
-      }
-      console.log("Navbar: ", n);
-      this.$store.state.query = n;
-      console.log("store: ", this.$store.state.query);
-    },
-  },
-  async mounted() {
-    if (this.$store.state.login) {
-      console.log("fetch user");
-      // context.commit("set_user_details", {})
-      try {
-        const response = await fetch("/current-user", {
-          headers: {
-            Authorization: `Bearer ${
-              sessionStorage.getItem("access_token")
-                ? sessionStorage.getItem("access_token")
-                : localStorage.getItem("access_token")
-            }`,
-          },
-        });
-        const jsonData = await response.json();
-        this.username = jsonData.username;
-        this.$store.state.user = jsonData;
-        console.log(jsonData.username);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  },
-};

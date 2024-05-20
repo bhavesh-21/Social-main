@@ -46,7 +46,8 @@ def log():
 @jwt_required()
 def current_usr():
     # Access the identity of the current user with get_jwt_identity
-    user=m()
+    verify_jwt_in_request()
+    user=Users.query.filter_by(email=get_jwt_identity()).first()
     global current_user
     current_user=user
     return jsonify(id=user.id,username=user.username,name=user.name,email=user.email,about=user.about_author,last_login=user.last_login,profile_pic=user.profile_pic), 200
@@ -276,7 +277,6 @@ def delete(username):
             db.session.delete(user)
             db.session.commit()
             return {"msg":"User Deleted Successfully!!"}
-
         except:
             return {"msg":"There was a problem deleting user..."},401
     else:

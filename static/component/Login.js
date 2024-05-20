@@ -106,9 +106,12 @@ export default {
           )
         }
         this.$store.commit("set_login_details", true)
-        this.$router.push('/feed')
-        window.location.href = window.location.href;
-        window.location.href = window.location.href;
+        
+        
+          this.$router
+            .push({ path: '/feed' })
+            .then(() => { this.$router.go(0) })
+        
       } else {
         let errorResponse = await res.json();
         this.error=errorResponse.msg
