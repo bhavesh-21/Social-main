@@ -24,7 +24,10 @@ from application.data.data_access import *
 from application.controller.controllers import current_user
 def url(picc,ifpic=False):
     if ifpic==False:
-        return os.path.join(app.config['POST_FOLDER'],picc)
+        if picc=="default_thumbnail.jpg":
+            return os.path.join("/static/images/",picc)
+        else:
+            return os.path.join(app.config['POST_FOLDER'],picc)
     else:
         return os.path.join(app.config['POST_FOLDER'],picc)
         
@@ -269,7 +272,7 @@ class Feed(Resource):
         posts = current_user.followed_posts().all()
         # posts = Posts.query.filter_by(poster_id=current_user.id).all()
         for p in posts:
-            p.thumbnail=p.thumbnail
+            p.thumbnail=url(p.thumbnail)
             p.lik=len(p.likes)
             p.commen=len(p.comments)
             # u=p.poster.username
@@ -288,7 +291,7 @@ class SearchFeed(Resource):
         # posts = posts.filter_by(posts.title.like('%' + query + '%'))
         # posts = Posts.query.filter_by(poster_id=current_user.id).all()
         for p in posts:
-            p.thumbnail=p.thumbnail
+            p.thumbnail=url(p.thumbnail)
             p.lik=len(p.likes)
             p.commen=len(p.comments)
             # u=p.poster.username
@@ -306,7 +309,7 @@ class Myposts(Resource):
         # posts = current_user.followed_posts().all()
         # posts = Posts.query.filter_by(poster_id=current_user.id).all()
         for p in posts:
-            p.thumbnail=p.thumbnail
+            p.thumbnail=url(p.thumbnail)
             p.lik=len(p.likes)
             p.commen=len(p.comments)
             # u=p.poster.username
@@ -326,7 +329,7 @@ class SearchMyposts(Resource):
         # posts = posts.filter_by(posts.title.like('%' + query + '%'))
         # posts = Posts.query.filter_by(poster_id=current_user.id).all()
         for p in posts:
-            p.thumbnail=p.thumbnail
+            p.thumbnail=url(p.thumbnail)
             p.lik=len(p.likes)
             p.commen=len(p.comments)
             # u=p.poster.username
@@ -370,7 +373,7 @@ class Post(Resource):
         if p is None:
             raise NotFoundError(status_code=404)
         current_user=m()  
-        p.thumbnail=p.thumbnail
+        p.thumbnail=url(p.thumbnail)
         p.lik=len(p.likes)
         p.commen=len(p.comments)
         p.commen=len(p.comments)

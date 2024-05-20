@@ -55,7 +55,7 @@ export default {
         <div class="card h-100">
 
             <a @click="goto('/post/'+post.id)">
-                <img :src="'/static/images/post_pic/'+post.thumbnail" class="card-img-top" alt="Skyscrapers" height="300px"
+                <img :src="post.thumbnail" class="card-img-top" alt="Skyscrapers" height="300px"
                     style="object-fit: cover; object-position: center top" />
             </a>
             <div class="card-body">

@@ -8,7 +8,7 @@ export default {
 
     <div class="shadow p-3 mb-5 mt-4 bg-body rounded container" style="box-sizing: border-box;">
 
-        <img :src="'/static/images/post_pic/'+post.thumbnail" alt="" class="img-fluid" style="border-radius: 0.8%;">
+        <img :src="post.thumbnail" alt="" class="img-fluid" style="border-radius: 0.8%;">
         <div class="post-content pt-4">
             <h2 class="as">{{ post.title }}</h2>
             <div class="mb-3">
