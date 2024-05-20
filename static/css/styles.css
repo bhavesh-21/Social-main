@@ -198,7 +198,7 @@ img {
     }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 500px) {
     #q {
       float:none !important;
       width: -webkit-fill-available !important;
