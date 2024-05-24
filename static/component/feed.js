@@ -73,7 +73,7 @@ export default {
             <div class="card-footer border-0">
                 <a @click="goto('/profile/'+post.poster.username)" class="d-flex align-items-center">
                     <div class="mr-2">
-                        <img class="profile-pic" :src="'/static/images/user_pic/'+post.poster.profile_pic" width="40px" height="40px"
+                        <img class="profile-pic" :src="post.poster.profile_pic" width="40px" height="40px"
                             style="object-fit: cover; object-position: center top">
                     </div>
                     <div style="margin:0px 15px 0px 15px">

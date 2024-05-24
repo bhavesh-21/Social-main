@@ -22,14 +22,21 @@ from flask_jwt_extended import JWTManager
 import base64
 from application.data.data_access import *
 from application.controller.controllers import current_user
-def url(picc,ifpic=False):
-    if ifpic==False:
+
+class urlt(fields.Raw):
+    def format(self, picc):
         if picc=="default_thumbnail.jpg":
             return os.path.join("/static/images/",picc)
         else:
             return os.path.join(app.config['POST_FOLDER'],picc)
-    else:
-        return os.path.join(app.config['POST_FOLDER'],picc)
+
+    
+class urlp(fields.Raw):
+    def format(self, picc):    
+        if picc=="default_profile_pic.png":
+            return os.path.join("/static/images/",picc)
+        else:
+            return os.path.join(app.config['PIC_FOLDER'],picc)
         
 
 
@@ -58,7 +65,7 @@ resource_fields = {
     'email' :    fields.String,
     'about_author':    fields.String,
     'last_login': fields.String,
-    'profile_pic':    fields.String,
+    'profile_pic':    urlp,
 }
 
 class Search_User(Resource):
@@ -259,7 +266,7 @@ post_fields = {
     'content' :    fields.String,
     'timestamp' :    fields.String,
     'slug':    fields.String,
-    'thumbnail': fields.String,
+    'thumbnail': urlt,
     'poster_id' :  fields.Integer,
     'poster':fields.Nested(resource_fields)
 }
@@ -272,7 +279,7 @@ class Feed(Resource):
         posts = current_user.followed_posts().all()
         # posts = Posts.query.filter_by(poster_id=current_user.id).all()
         for p in posts:
-            p.thumbnail=url(p.thumbnail)
+            p.thumbnail=p.thumbnail
             p.lik=len(p.likes)
             p.commen=len(p.comments)
             # u=p.poster.username
@@ -291,7 +298,7 @@ class SearchFeed(Resource):
         # posts = posts.filter_by(posts.title.like('%' + query + '%'))
         # posts = Posts.query.filter_by(poster_id=current_user.id).all()
         for p in posts:
-            p.thumbnail=url(p.thumbnail)
+            p.thumbnail=p.thumbnail
             p.lik=len(p.likes)
             p.commen=len(p.comments)
             # u=p.poster.username
@@ -309,7 +316,7 @@ class Myposts(Resource):
         # posts = current_user.followed_posts().all()
         # posts = Posts.query.filter_by(poster_id=current_user.id).all()
         for p in posts:
-            p.thumbnail=url(p.thumbnail)
+            p.thumbnail=p.thumbnail
             p.lik=len(p.likes)
             p.commen=len(p.comments)
             # u=p.poster.username
@@ -329,7 +336,7 @@ class SearchMyposts(Resource):
         # posts = posts.filter_by(posts.title.like('%' + query + '%'))
         # posts = Posts.query.filter_by(poster_id=current_user.id).all()
         for p in posts:
-            p.thumbnail=url(p.thumbnail)
+            p.thumbnail=p.thumbnail
             p.lik=len(p.likes)
             p.commen=len(p.comments)
             # u=p.poster.username
@@ -338,7 +345,7 @@ class SearchMyposts(Resource):
         return posts
 
 commenter_fields = {
-    'profile_pic':    fields.String,
+    'profile_pic':   urlp,
 }
 
 comment_fields = {
@@ -358,7 +365,7 @@ postt_fields = {
     'content' :    fields.String,
     'timestamp' :    fields.String,
     'slug':    fields.String,
-    'thumbnail': fields.String,
+    'thumbnail': urlt,
     'poster_id' :  fields.Integer,
     'poster':fields.Nested(resource_fields),
     'comments':fields.Nested(comment_fields)
@@ -373,7 +380,7 @@ class Post(Resource):
         if p is None:
             raise NotFoundError(status_code=404)
         current_user=m()  
-        p.thumbnail=url(p.thumbnail)
+        p.thumbnail=p.thumbnail
         p.lik=len(p.likes)
         p.commen=len(p.comments)
         p.commen=len(p.comments)
@@ -437,7 +444,7 @@ comment_fields = {
     'text':    fields.String, 
     'date_created' :    fields.String,
     'user_name' :    fields.String,
-    'user_profile_pic' :    fields.String,
+    'user_profile_pic' :    urlp,
     'author' :    fields.Integer,
     'post_id':    fields.Integer
 }
@@ -484,5 +491,3 @@ class followinginfo(Resource):
         if userp is None:
             raise NotFoundError(status_code=404)
         return {'following':user}
-
-

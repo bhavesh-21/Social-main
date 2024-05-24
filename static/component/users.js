@@ -15,7 +15,7 @@ export default {
                 <a @click="goto('/profile/'+user.username)" class="about-author d-flex align-items-center m-0 p-1">
                     <div class="col-md-4 p-1">
                         <img class="profile-pic"
-                        :src="'/static/images/user_pic/'+user.profile_pic" width="195px"
+                        :src="user.profile_pic" width="195px"
                             height="195px" style="object-fit: cover; object-position: center top">
                     </div>
                     <div class="col-md-8 " style="margin-left: 15px;">

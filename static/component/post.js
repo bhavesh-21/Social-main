@@ -90,7 +90,7 @@ export default {
             <h4>About Author</h4>
             <a @click="goto('/profile/'+post.poster.username)"  class="about-author d-flex align-items-center">
                 <img class="profile-pic"
-                    :src="'/static/images/user_pic/'+post.poster.profile_pic" width="160"
+                    :src="post.poster.profile_pic" width="160"
                     height="160" style="object-fit: cover; object-position: center top">
 
                 <div style="margin-left: 20px;" class="com">
@@ -120,7 +120,7 @@ export default {
             <div v-for="comment in post.comments" class="about-author mb-4">
             
                 <img class="profile-pic"
-                    :src="'/static/images/user_pic/'+comment.user_profile_pic" width="80"
+                    :src="comment.user_profile_pic" width="80"
                     height="80" style="object-fit: cover; object-position: center top">
                 <div class="reply-body container">
                     <h5>
