@@ -33,8 +33,8 @@ def create_app():
 app, api = create_app()
 CORS(app)
 app.config.update(
-    CELERY_BROKER_URL=os.getenv("REDIS_URL", default='redis://localhost:6379'),
-    CELERY_RESULT_BACKEND=os.getenv("REDIS_URL", default='redis://localhost:6379')
+    CELERY_BROKER_URL='redis://default:bIWGMfyLZmGqEWXOEnGsJLIaOqFXcOeo@monorail.proxy.rlwy.net:21672',
+    CELERY_RESULT_BACKEND='redis://default:bIWGMfyLZmGqEWXOEnGsJLIaOqFXcOeo@monorail.proxy.rlwy.net:21672'
 )
 celery = make_celery(app)
 app.config["JWT_SECRET_KEY"] = "super-secret" 

@@ -1,15 +1,15 @@
 {
-  "$schema": "https://schema.up.railway.app/railway.schema.json",
-  "build": {
-    "nixpacksPlan": {
-      "phases": {
-        "setup": {
-          "nixPkgs": ["...", "parallel"]
+    "$schema": "https://schema.up.railway.app/railway.schema.json",
+    "build": {
+      "nixpacksPlan": {
+        "phases": {
+          "setup": {
+            "nixPkgs": ["...", "parallel"]
+          }
         }
       }
+    },
+    "deploy": {
+      "startCommand": "parallel --ungroup --halt now,fail=1 ::: 'celery -A app:celery worker --loglevel=info --concurrency=1' 'gunicorn app:app'"
     }
-  },
-  "deploy": {
-    "startCommand": "parallel --ungroup --halt now,fail=1 ::: 'celery -A app:celery worker --loglevel=info' 'gunicorn app:app'"
   }
-}
