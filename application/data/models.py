@@ -19,7 +19,7 @@ class Users(db.Model, UserMixin):
     last_login = db.Column(db.DateTime, default=datetime.utcnow)
     profile_pic = db.Column(db.String(), nullable=True,default='default_profile_pic.png')
     # fs_uniquifier= db.Column(db.String(255), nullable=True, nullable=False, default=)
-
+    is_confirmed = db.Column(db.Boolean, nullable=False, default=False)
     # Do some password stuff!
     password_hash = db.Column(db.String(128))
     # User Can Have Many Posts

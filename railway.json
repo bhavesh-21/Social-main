@@ -1,11 +1,15 @@
 {
-    "$schema": "https://railway.app/railway.schema.json",
-    "build": {
-        "builder": "NIXPACKS"
-    },
-    "deploy": {
-        "startCommand": "gunicorn app:app",
-        "restartPolicyType": "ON_FAILURE",
-        "restartPolicyMaxRetries": 10
+  "$schema": "https://schema.up.railway.app/railway.schema.json",
+  "build": {
+    "nixpacksPlan": {
+      "phases": {
+        "setup": {
+          "nixPkgs": ["...", "parallel"]
+        }
+      }
     }
+  },
+  "deploy": {
+    "startCommand": "parallel --ungroup --halt now,fail=1 ::: 'celery -A app:celery worker --loglevel=info' 'gunicorn main:app'"
+  }
 }

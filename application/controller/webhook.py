@@ -23,10 +23,10 @@ def create_pdf_report(data):
     return(file_name)
 
 
-SMPTP_SERVER_HOST = "localhost"
-SMPTP_SERVER_PORT = 1025
-SENDER_ADDRESS = "support@bloglite.com"
-SENDER_PASSWORD =""
+SMPTP_SERVER_HOST = "smtp.gmail.com"
+SMPTP_SERVER_PORT = 587
+SENDER_ADDRESS = "b2discover@gmail.com"
+SENDER_PASSWORD ="Bggg@001199"
 
 def send_email(to_address, subject, message, content="text", attachment_file=None):
     msg = MIMEMultipart()
@@ -71,6 +71,5 @@ def send_welcome_message(data):
         content="html",
         # attachment_file=att,
     )
-    
-     
+
 

@@ -14,7 +14,8 @@ from flask_caching import Cache
 app = None
 api = None
 cache=None
-
+# from dotenv import load_dotenv
+# load_dotenv()
 import time
 
 def create_app():
@@ -32,8 +33,8 @@ def create_app():
 app, api = create_app()
 CORS(app)
 app.config.update(
-    CELERY_BROKER_URL='redis://localhost:6379',
-    CELERY_RESULT_BACKEND='redis://localhost:6379'
+    CELERY_BROKER_URL=os.getenv("REDIS_URL", default='redis://localhost:6379'),
+    CELERY_RESULT_BACKEND=os.getenv("REDIS_URL", default='redis://localhost:6379')
 )
 celery = make_celery(app)
 app.config["JWT_SECRET_KEY"] = "super-secret" 

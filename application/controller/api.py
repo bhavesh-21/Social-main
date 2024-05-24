@@ -8,7 +8,7 @@ from application.data.database import db
 from flask import current_app as app
 from flask import jsonify,request
 import werkzeug
-from flask import abort
+from flask import abort, request
 from sqlalchemy import and_
 from werkzeug.utils import secure_filename
 import uuid as uuid
@@ -22,7 +22,7 @@ from flask_jwt_extended import JWTManager
 import base64
 from application.data.data_access import *
 from application.controller.controllers import current_user
-
+from application.controller.webhook import *
 class urlt(fields.Raw):
     def format(self, picc):
         if picc=="default_thumbnail.jpg":
@@ -139,11 +139,11 @@ class User_all(Resource):
         if user is None:
             raise AlreadyExistError(status_code=409)
         
-        user = Users(name=name,username=username, email=email,about_author=about_author)
+        user = Users(name=name,username=username, email=email,about_author=about_author,is_confirmed=True)
         user.set_password(password)
         db.session.add(user)
         db.session.commit()
-
+        # send_welcome_message(data={"name": user.name, "email": user.email,"data":"Welcome To Social COnnect","link":request.host})
         return user, 201       
 
 class User(Resource):

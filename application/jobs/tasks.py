@@ -56,12 +56,13 @@ from application.controller.webhook import *
 def setup_periodic_tasks(sender, **kwargs):
     # Calls test('hello') every 10 seconds.
     sender.add_periodic_task(
-        crontab(hour=17,minute=14),
+        crontab(hour=17,minute=1),
         # 5,
         daily.s(), name='Daily Remainder'
     )
     sender.add_periodic_task(
-        crontab(hour=17,minute=14,day_of_week=1),
+        crontab(minute=1),
+        # crontab(hour=17,minute=14,day_of_week=1),
         # 5,
         sen.s(), name='Monthly Report'
     )
