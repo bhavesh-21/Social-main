@@ -10,6 +10,6 @@
     }
   },
   "deploy": {
-    "startCommand": "parallel --ungroup --halt now,fail=1 ::: 'celery -A app:celery worker --loglevel=info' 'gunicorn main:app'"
+    "startCommand": "parallel --ungroup --halt now,fail=1 ::: 'celery -A app:celery worker --loglevel=info' 'gunicorn app:app'"
   }
 }
