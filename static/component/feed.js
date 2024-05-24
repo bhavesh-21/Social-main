@@ -210,7 +210,7 @@ export default {
     },
     check(post) {
       console.log("my id ", this.$store.state.user.username);
-      return post.poster.username != this.$store.state.user.username;
+      return (post.poster.username != this.$store.state.user.username & this.$store.state.user.email!=="admin@socialconnect.com" );
     },
     goto(url) {
       this.$router.push(url).catch(() => { });

@@ -154,7 +154,7 @@ export default {
       }
     },
     me(name) {
-      return this.$store.state.user.username!=name;
+      return ( this.$store.state.user.username!=name & this.$store.state.user.email!=="admin@socialconnect.com" );
     },
     goto(url) {
       this.$router.push(url).catch(()=>{});

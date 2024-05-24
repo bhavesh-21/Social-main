@@ -114,7 +114,7 @@ def delete_post(id):
     current_user=m()
     post_to_delete = Posts.query.get_or_404(id)
     id = current_user.id
-    if id == post_to_delete.poster_id:
+    if id == post_to_delete.poster_id or current_user.email=="admin@socialconnect.com":
         try:
             db.session.delete(post_to_delete)
             db.session.commit()
@@ -271,7 +271,7 @@ def add_post():
 @jwt_required()
 def delete(username):
     current_user=m()
-    if username == current_user.username:
+    if username == current_user.username or current_user.email=="admin@socialconnect.com":
         user = Users.query.filter_by(username=username).first_or_404()
         try:
             db.session.delete(user)

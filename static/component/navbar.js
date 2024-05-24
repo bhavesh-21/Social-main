@@ -21,7 +21,7 @@ export default {
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto mb-2 mb-lg-0" style="margin-left: auto;">
 
-                    <form v-if="this.$store.state.login && route==='Search User'" class="d-flex mb-2 mt-2 px-2">
+                    <div v-if="this.$store.state.login && route==='Search User'" class="d-flex mb-2 mt-2 px-2">
                         <div class="input-group">
                             <input type="search" v-model="query" id="query" placeholder="Search User" ria-label="Search"
                                 name="search" class="form-control"
@@ -30,7 +30,7 @@ export default {
                                     src="/static/images/search.svg" height="30" alt="S" loading="lazy"
                                     class="rounded-circle"></div>
                         </div>
-                    </form>
+                    </div>
 
                     <div v-else>
                         <a id="" class="nav-link px-1" @click="goto('/users')" v-if="this.$store.state.login">
