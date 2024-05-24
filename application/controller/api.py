@@ -247,6 +247,7 @@ update_post_parser.add_argument('title', type=str, help="title of post")
 update_post_parser.add_argument('content', type=str, help="content of post")
 update_post_parser.add_argument('slug', type=str, help="slug of post")
 
+
 post_fields = {
     'id' :  fields.Integer,
     'lik' :  fields.Integer,
