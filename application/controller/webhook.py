@@ -25,8 +25,8 @@ def create_pdf_report(data):
 
 SMPTP_SERVER_HOST = "smtp.gmail.com"
 SMPTP_SERVER_PORT = 587
-SENDER_ADDRESS = "b2discover@gmail.com"
-SENDER_PASSWORD ="Bggg@001199"
+SENDER_ADDRESS = "x@gmail.com"
+SENDER_PASSWORD =""
 
 def send_email(to_address, subject, message, content="text", attachment_file=None):
     msg = MIMEMultipart()
