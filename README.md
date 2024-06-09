@@ -21,7 +21,7 @@
 
 
 # Social Connect
-<img src="./web_pic/blog-black.png" alt="Image" style="width: 300px;">
+<img src="./static/images/blog-black.png" alt="Image" style="width: 300px;">
 
 # Local Run
 1. run make_env.sh to me virtual enviornment.
